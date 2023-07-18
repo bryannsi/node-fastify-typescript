@@ -1,16 +1,21 @@
-import fastify from 'fastify'
+import 'dotenv/config';
+import fastify, { FastifyInstance } from 'fastify'
+import { IUser } from './interface/IUser'
+const server: FastifyInstance = fastify({ logger: Boolean(process.env.SERVER_LOG_ENABLED) })
 
-const server = fastify({ logger: true })
+const port = Number(process.env.SERVER_PORT) || 3000;
+const host = process.env.SERVER_HOST || '127.0.0.1';
 
-server.get("/init", (req, res) => {
-  server.log.info(req)
+server.get<{ Body: IUser }>("/user/:id", async (req, res) => {
+  const { id } = req.params as IUser
+  server.log.info(id)
   res.send({ "mensaje": "este es el punto de entrada" })
-
 })
 
-server.listen({ port: 3000, host: '127.0.0.1' }, (err, address) => {
-    if (err) {
-      process.exit(1)
-    }
-    console.log(`El servidor se está ejecutando en: ${address}`)
-  })
+server.listen({ port: port, host: host }, (err, address) => {
+  if (err) {
+    server.log.error(err)
+    process.exit(1)
+  }
+  console.log(`El servidor se está ejecutando en: ${address}`)
+})
