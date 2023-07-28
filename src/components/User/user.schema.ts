@@ -1,10 +1,13 @@
 export const userSchema = {
+  title: "Users schema",
+  type: "object",
   params: {
-    type: 'object',
     properties: {
-      dni: { type: 'string' },
+      dni: { type: "string" }
     }
-  }
+  },
+  additionalProperties: false,
+  required: ["dni"]
 }
 
 export default { userSchema }
