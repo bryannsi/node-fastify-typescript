@@ -1,4 +1,5 @@
-import Connection from "../../db/dbConnection"
+import Connection from "../../db/dbConnectionManager"
+import { config1 } from "../../db/dbConnectionSettings"
 
 export const GetUsers = async (dni: string) => {
   try {
@@ -12,7 +13,16 @@ export const GetUsers = async (dni: string) => {
   }
 }
 
-export function GetData() {
-  const cnn = new Connection()
-  cnn.mssql.connect()
+export const GetData = async () => {
+  try {
+    const pool = await new Connection(config1).pool.connect()
+    const result = pool.query(`SELECT * FROM TABLE`)
+    console.dir(result)
+  } catch (error) {
+    console.log(error)
+  }
+
+  // pool.request().query("SELECT * FROM TABLE", (err, result) => {
+  //   err ? console.error(err) : console.log(result)
+  // })
 }
