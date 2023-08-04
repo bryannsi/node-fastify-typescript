@@ -9,6 +9,12 @@ const userRouter = async (fastify: FastifyInstance) => {
     schema: userSchema,
     handler: controller.GetUserById
   })
+
+  fastify.route({
+    method: "GET",
+    url: "/users/",
+    handler: controller.GetAllData
+  })
 }
 
 export default userRouter
